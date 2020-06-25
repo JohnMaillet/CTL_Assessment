@@ -1,0 +1,139 @@
+﻿@model IList<Order>
+@{
+    ViewData["Title"] = "Orders File Upload Page";
+}
+@{
+    Layout = "_Layout";
+}
+
+<p>
+    <h4>&nbsp;&nbsp;<b>UPLOAD ORDERS</b></h4>
+</p>
+<hr />
+<br />
+@using (Html.BeginForm("UploadFile", "Orders", FormMethod.Post))
+{
+    <div class="buttons">
+        <div class="upload-button two-col">
+            <div class="col1">
+                <input id="files" name="files" type="file" /><br /><br />
+            </div>
+            <div class="col2">
+                <button type="button" class="btn btn-info" onclick="uploadFiles('files');">Upload</button>
+            </div>
+        </div>
+    </div>
+}
+<div class="progress">
+    <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+        <div id="label" class="control-label">0%</div>
+    </div>
+</div>
+
+@Html.Hidden("orders")
+
+<script type="text/javascript" charset="utf-8">
+    var isUpload = true;
+    var orders;
+    function uploadFiles(inputId) {
+        isUpload = false;
+        var input = document.getElementById(inputId);
+        var files = input.files;
+        var formData = new FormData();
+        formData.append("file", files[0]);
+
+    startUpdatingProgressIndicator();
+        $.ajax(
+            {
+                url: "Orders/upload",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+                    if (data['message'] === "Data Uploaded Successfully!") {
+                        stopUpdatingProgressIndicator();
+                        orders = data['orders'];
+                    }
+                    else {
+                        alert(data['message']);
+                        stopUpdatingProgressIndicator();
+                    }
+                    isUpload = true;
+                }
+            }
+        ).done(function (res) {
+            submitOrders(orders);           
+        }).fail(function (xhr, a, error) {
+            console.log(error);
+        });;
+    } var intervalId; function startUpdatingProgressIndicator() {
+        $("#progress").show(); intervalId = setInterval(
+            function () {
+                $.post(
+                    "/Orders/progress",
+                    function (progress) {
+                        $("#progress").css({ width: progress + "%" });
+                        $("#label").html(progress + "%");
+                    }
+                );
+            },
+            10
+        );
+    } function stopUpdatingProgressIndicator() {
+        clearInterval(intervalId);
+    }
+
+    function submitOrders(orders) {
+
+        var formData = new FormData();
+        formData.append("orders", JSON.stringify(orders));
+
+        var form = $(document.createElement('form'));
+        $(form).attr("action", "Orders/Confirmation");
+        $(form).attr("method", "POST");
+        $(form).css("display", "none");
+        $('<input>', {
+            type: 'hidden',
+            id: 'orders',
+            name: 'orders',
+            value: JSON.stringify(orders)                           
+        }).appendTo(form);
+        form.appendTo(document.body);
+       $(form).submit();
+    }
+
+    function submitstuff() {
+        docuent.getElementByName("orders").value = orders;
+
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open("POST", "Orders/Confirmation");
+        oReq.send();
+    }
+    function createInput() {
+
+    }
+</script>
+<style>
+    .two-col {
+        overflow: hidden; /* Makes this div contain its floats */
+    }
+
+        .two-col .col1,
+        .two-col .col2 {
+            width: 49%;
+        }
+
+        .two-col .col1 {
+            float: left;
+        }
+
+        .two-col .col2 {
+            float: right;
+        }
+
+        .two-col label {
+            display: block;
+        }
+</style>

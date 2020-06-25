@@ -1,0 +1,73 @@
+﻿@model IList<Order>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).OrderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).Addr1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).Postal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).SKU)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElementAt(0).Quantity)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < 5; i++)
+        {
+            <tr>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].OrderId, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].FirstName, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].LastName, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].Addr1, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].City, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].State, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].Postal, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].SKU, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => Model[i].Quantity, new { @readonly = "readonly" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
